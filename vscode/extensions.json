@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "JakeBecker.elixir-ls",
+        "phoenixframework.phoenix",
+        "pantajoe.vscode-elixir-credo",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "ms-azuretools.vscode-docker"
+    ]
+}

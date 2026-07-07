@@ -1,0 +1,104 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "device_api: phx.server",
+      "type": "shell",
+      "command": "iex -S mix phx.server",
+      "options": {
+        "cwd": "${workspaceFolder:device_api}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "thirdparty_api: phx.server",
+      "type": "shell",
+      "command": "PORT=4001 iex -S mix phx.server",
+      "options": {
+        "cwd": "${workspaceFolder:thirdparty_api}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "doorapi_front: phx.server",
+      "type": "shell",
+      "command": "PORT=4002 iex -S mix phx.server",
+      "options": {
+        "cwd": "${workspaceFolder:doorapi_front}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "device_api: test",
+      "type": "shell",
+      "command": "mix test",
+      "options": {
+        "cwd": "${workspaceFolder:device_api}"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "thirdparty_api: test",
+      "type": "shell",
+      "command": "mix test",
+      "options": {
+        "cwd": "${workspaceFolder:thirdparty_api}"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "doorapi_front: test",
+      "type": "shell",
+      "command": "mix test",
+      "options": {
+        "cwd": "${workspaceFolder:doorapi_front}"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Percona: logs",
+      "type": "shell",
+      "command": "podman logs -f doorapi-percona",
+      "problemMatcher": []
+    },
+    {
+      "label": "Percona: start",
+      "type": "shell",
+      "command": "podman start doorapi-percona",
+      "problemMatcher": []
+    },
+    {
+      "label": "Percona: stop",
+      "type": "shell",
+      "command": "podman stop doorapi-percona",
+      "problemMatcher": []
+    },
+    {
+      "label": "K8s: pods",
+      "type": "shell",
+      "command": "kubectl get pods -n doorapi-dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "K8s: device_api logs",
+      "type": "shell",
+      "command": "kubectl logs -n doorapi-dev -f deploy/device-api",
+      "problemMatcher": []
+    },
+    {
+      "label": "K8s: thirdparty_api logs",
+      "type": "shell",
+      "command": "kubectl logs -n doorapi-dev -f deploy/thirdparty-api",
+      "problemMatcher": []
+    },
+    {
+      "label": "K8s: front logs",
+      "type": "shell",
+      "command": "kubectl logs -n doorapi-dev -f deploy/doorapi-front",
+      "problemMatcher": []
+    }
+  ]
+}

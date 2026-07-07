@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.move-instance" path="/org/gnome/shell/extensions/move-instance/">
+    <key name="whitelist" type="as">
+      <default>['Spotify', 'Bitwarden']</default>
+      <summary>Force Move Application List</summary>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "mix_task",
+      "name": "Debug device_api Phoenix",
+      "request": "launch",
+      "task": "phx.server",
+      "projectDir": "${workspaceFolder:device_api}",
+      "env": {
+        "MIX_ENV": "dev"
+      }
+    },
+    {
+      "type": "mix_task",
+      "name": "Debug thirdparty_api Phoenix",
+      "request": "launch",
+      "task": "phx.server",
+      "projectDir": "${workspaceFolder:thirdparty_api}",
+      "env": {
+        "MIX_ENV": "dev",
+        "PORT": "4001"
+      }
+    },
+    {
+      "type": "mix_task",
+      "name": "Debug doorapi_front Phoenix",
+      "request": "launch",
+      "task": "phx.server",
+      "projectDir": "${workspaceFolder:doorapi_front}",
+      "env": {
+        "MIX_ENV": "dev",
+        "PORT": "4002"
+      }
+    }
+  ]
+}

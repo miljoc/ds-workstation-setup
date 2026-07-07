@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.containers" path="/org/gnome/shell/extensions/containers/">
+    <key name="extra-info" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="pod-list-sort-by" type="s">
+      <default>"created"</default>
+    </key>
+
+    <key name="terminal" type="s">
+      <default>"gnome-terminal --"</default>
+      <description>The terminal program and arguments to use for running commands such as shell, logs, stats, and watch</description>
+   </key>
+ </schema>
+</schemalist>

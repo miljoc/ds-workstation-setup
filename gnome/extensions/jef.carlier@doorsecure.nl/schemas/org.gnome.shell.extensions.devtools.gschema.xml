@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.devtools" path="/org/gnome/shell/extensions/devtools/">
+    <key name="walker-shortcut" type="as">
+      <default><![CDATA[['<Super>space']]]></default>
+      <summary>Walker shortcut</summary>
+      <description>Shortcut used to open Walker.</description>
+    </key>
+  </schema>
+</schemalist>

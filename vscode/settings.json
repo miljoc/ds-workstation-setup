@@ -1,0 +1,44 @@
+{
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  "[elixir]": {
+    "editor.defaultFormatter": "lexical-lsp.lexical"
+  },
+  "[phoenix-heex]": {
+    "editor.defaultFormatter": "lexical-lsp.lexical"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "files.associations": {
+    "*.heex": "phoenix-heex",
+    "*.leex": "phoenix-heex",
+    "*.sface": "phoenix-heex"
+  },
+
+  "emmet.includeLanguages": {
+    "phoenix-heex": "html",
+    "elixir": "html"
+  },
+
+  "tailwindCSS.includeLanguages": {
+    "phoenix-heex": "html",
+    "elixir": "html"
+  },
+
+  "yaml.schemas": {
+    "kubernetes": [
+      "doorapi-k8s/**/*.yaml",
+      "doorapi-k8s/**/*.yml"
+    ]
+  }
+}

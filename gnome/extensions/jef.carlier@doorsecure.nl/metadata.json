@@ -1,0 +1,9 @@
+{
+  "name": "Jefs Dev Tools",
+  "description": "Generate random UUID and current time in milliseconds as a shell extension.",
+  "version": 14,
+  "uuid": "jef.carlier@doorsecure.nl",
+  "shell-version": ["45", "46", "47", "48", "49", "50"],
+  "url": "https://github.com/miljoc/gnome-shell-extension-dev-tools",
+  "gettext-domain": "gnome-shell-extension-devtools",
+}
