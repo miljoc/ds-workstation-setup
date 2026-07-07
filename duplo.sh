@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="${REPO_URL:-https://github.com/miljoc/doorapi-dev-machien.git}"
+REPO_URL="${REPO_URL:-https://github.com/miljoc/ds-workstation-setup.git}"
 TARGET_DIR="${TARGET_DIR:-$HOME/doorapi-dev-machien}"
 
 echo "== 🔥🔥🔥 🇺🇸 Almighty Jeff ✝️ and Mike Row Soft 🇨🇳 presents 🔥🔥🔥 =="
