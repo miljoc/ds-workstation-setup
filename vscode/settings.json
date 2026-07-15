@@ -2,6 +2,12 @@
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
+  "elixirLS.mixEnv": "dev",
+  "elixirLS.mixTarget": "",
+  "elixirLS.fetchDeps": false,
+  "elixirLS.dialyzerEnabled": false,
+
+  "elixir.credo.executePath": "${env:HOME}/.local/share/mise/shims/mix",
 
   "[elixir]": {
     "editor.defaultFormatter": "lexical-lsp.lexical"

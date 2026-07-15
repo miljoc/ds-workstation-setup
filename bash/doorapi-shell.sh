@@ -1,4 +1,3 @@
-cat > bash/doorapi-shell.sh <<'EOF'
 # DoorAPI shell config
 
 # PATH
@@ -126,4 +125,3 @@ if command -v fzf >/dev/null 2>&1; then
     export FZF_DEFAULT_COMMAND='find . -type f 2>/dev/null'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
-EOF

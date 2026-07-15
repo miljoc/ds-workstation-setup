@@ -1,4 +1,3 @@
-cat > bash/bashrc <<'EOF'
 # ~/.bashrc
 
 # Source global definitions
@@ -10,4 +9,3 @@ fi
 if [ -f "$HOME/.config/bash/doorapi-shell.sh" ]; then
     . "$HOME/.config/bash/doorapi-shell.sh"
 fi
-EOF

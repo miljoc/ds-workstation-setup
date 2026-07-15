@@ -7,4 +7,5 @@ flatpak install -y flathub \
   org.kde.kdenlive \
   re.sonny.OhMySVG \
   org.blender.Blender \
+  it.fabiodistasio.AntaresSQL \
   com.valvesoftware.Steam || true

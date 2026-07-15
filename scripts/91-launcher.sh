@@ -132,31 +132,46 @@ prefix = ":"
 provider = "symbols"
 CONFIG
 
-cat > "$HOME/.config/systemd/user/elephant.service" <<EOF_SERVICE
+cat > "$HOME/.config/systemd/user/elephant.service" <<'EOF_SERVICE'
 [Unit]
 Description=Elephant Backend for Walker
+PartOf=graphical-session.target
 After=graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
 
 [Service]
-ExecStart=$LOCAL_BIN/elephant
+Type=simple
+ExecStart=%h/.local/bin/elephant
 Restart=on-failure
-Environment=PATH=$LOCAL_BIN:/usr/local/bin:/usr/bin:/bin
+RestartSec=3
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=default.target
+EOF_SERVICE
+
+cat > "$HOME/.config/systemd/user/walker.service" <<'EOF_SERVICE'
+[Unit]
+Description=Walker Launcher Service
+PartOf=graphical-session.target
+After=elephant.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/walker --gapplication-service
+Restart=on-failure
+RestartSec=3
 
 [Install]
 WantedBy=default.target
 EOF_SERVICE
 
 systemctl --user daemon-reload
-systemctl --user enable --now elephant.service
-systemctl --user restart elephant.service
+systemctl --user enable --now elephant.service walker.service
+systemctl --user restart elephant.service walker.service
 sleep 2
 
 echo "→ Installed providers:"
 "$LOCAL_BIN/elephant" listproviders || true
-
-# Warm up Walker once if a graphical session is available.
-if [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
-  "$LOCAL_BIN/walker" --gapplication-service >/tmp/walker-service.log 2>&1 & disown || true
-fi
 
 echo "✅ Walker + Elephant klaar. Test met: walker"

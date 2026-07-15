@@ -42,6 +42,18 @@ curl -s http://localhost:11434/api/tags || echo "Ollama not running."
 echo
 echo "== GStreamer =="
 gst-inspect-1.0 gtk4paintablesink >/dev/null 2>&1 && echo "gtk4paintablesink OK" || echo "gtk4paintablesink MISSING"
+gst-inspect-1.0 avdec_h264 >/dev/null 2>&1 && echo "avdec_h264 OK" || echo "avdec_h264 MISSING"
+gst-inspect-1.0 gtkwaylandsink >/dev/null 2>&1 && echo "gtkwaylandsink OK" || echo "gtkwaylandsink MISSING"
+
+echo
+echo "== Desktop services =="
+check "Elephant service enabled" "systemctl --user is-enabled elephant.service"
+check "Walker service enabled" "systemctl --user is-enabled walker.service"
+check "UxPlay service enabled" "systemctl --user is-enabled uxplay.service"
+check "UxPlay binary" "/usr/local/bin/uxplay -v"
+check "Nautilus image extension" "test -f '$HOME/.local/share/nautilus-python/extensions/image_converter.py'"
+check "HEIC converter" "command -v heif-convert"
+check "ImageMagick" "command -v magick"
 
 echo
 echo "== 👌 Original Dev Machien 🤌 =="

@@ -47,3 +47,34 @@ Tela is installed by `scripts/45-tela-icons.sh` and defaults to:
 ```text
 Tela-pink-dark
 ```
+
+## Nautilus image tools
+
+The setup installs a native Nautilus context menu under **Afbeelding bewerken** with:
+
+- HEIC/HEIF/AVIF and common image formats to JPG, PNG, or WebP;
+- a 2048 px JPG preset;
+- rotate left and rotate right actions;
+- automatic Nautilus directory refresh after processing.
+
+The extension is installed at:
+
+```text
+~/.local/share/nautilus-python/extensions/image_converter.py
+```
+
+## UxPlay
+
+UxPlay is built from source and installed in `/usr/local/bin`. The user service starts it with:
+
+```text
+uxplay -p -vs gtkwaylandsink
+```
+
+`-p` enables the legacy fixed ports. The setup opens mDNS and the required TCP/UDP ports in firewalld.
+
+Override the pinned source tag during installation with, for example:
+
+```bash
+UXPLAY_TAG=v1.73 ./install.sh
+```
