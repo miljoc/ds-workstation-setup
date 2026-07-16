@@ -1,12 +1,24 @@
 {
-    "recommendations": [
-        "JakeBecker.elixir-ls",
-        "phoenixframework.phoenix",
-        "pantajoe.vscode-elixir-credo",
-        "bradlc.vscode-tailwindcss",
-        "esbenp.prettier-vscode",
-        "redhat.vscode-yaml",
-        "ms-kubernetes-tools.vscode-kubernetes-tools",
-        "ms-azuretools.vscode-docker"
-    ]
+  "recommendations": [
+    "ExpertLSP.expert",
+    "phoenixframework.phoenix",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "redhat.vscode-yaml",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "ms-azuretools.vscode-containers",
+    "ms-vscode.makefile-tools",
+    "eamodio.gitlens",
+    "usernamehw.errorlens",
+    "gruntfuggly.todo-tree",
+    "editorconfig.editorconfig",
+    "tamasfe.even-better-toml",
+    "yzhang.markdown-all-in-one"
+  ],
+  "unwantedRecommendations": [
+    "lexical-lsp.lexical",
+    "JakeBecker.elixir-ls",
+    "jakebecker.elixir-ls",
+    "pantajoe.vscode-elixir-credo"
+  ]
 }

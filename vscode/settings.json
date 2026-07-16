@@ -2,18 +2,18 @@
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "elixirLS.mixEnv": "dev",
-  "elixirLS.mixTarget": "",
-  "elixirLS.fetchDeps": false,
-  "elixirLS.dialyzerEnabled": false,
-
-  "elixir.credo.executePath": "${env:HOME}/.local/share/mise/shims/mix",
 
   "[elixir]": {
-    "editor.defaultFormatter": "lexical-lsp.lexical"
+    "editor.defaultFormatter": "ExpertLSP.expert",
+    "editor.formatOnSave": true
   },
   "[phoenix-heex]": {
-    "editor.defaultFormatter": "lexical-lsp.lexical"
+    "editor.defaultFormatter": "ExpertLSP.expert",
+    "editor.formatOnSave": true
+  },
+  "[elixir-eex]": {
+    "editor.defaultFormatter": "ExpertLSP.expert",
+    "editor.formatOnSave": true
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -25,17 +25,27 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
+  "files.watcherExclude": {
+    "**/_build/**": true,
+    "**/deps/**": true,
+    "**/.git/**": true,
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/_build": true,
+    "**/deps": true,
+    "**/node_modules": true
+  },
+
   "files.associations": {
     "*.heex": "phoenix-heex",
     "*.leex": "phoenix-heex",
     "*.sface": "phoenix-heex"
   },
-
   "emmet.includeLanguages": {
     "phoenix-heex": "html",
     "elixir": "html"
   },
-
   "tailwindCSS.includeLanguages": {
     "phoenix-heex": "html",
     "elixir": "html"
@@ -45,6 +55,20 @@
     "kubernetes": [
       "doorapi-k8s/**/*.yaml",
       "doorapi-k8s/**/*.yml"
+    ],
+    "file://${env:HOME}/.vscode/extensions/continue.continue-2.0.0-linux-x64/config-yaml-schema.json": [
+      ".continue/**/*.yaml"
     ]
+  },
+
+  "todo-tree.ripgrep": "/usr/bin/rg",
+  "todo-tree.ripgrep.ripgrep": "/usr/bin/rg",
+
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/usr/bin/bash",
+      "args": ["-l"]
+    }
   }
 }

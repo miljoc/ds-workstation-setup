@@ -1,12 +1,27 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXTENSIONS=(
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+GLOBAL_SETTINGS_DIR="$HOME/.config/Code/User"
+GLOBAL_SETTINGS_FILE="$GLOBAL_SETTINGS_DIR/settings.json"
+
+# Expert is the only Elixir language server managed by Doorstation.
+# Remove conflicting/deprecated extensions to avoid duplicate commands,
+# formatters, diagnostics and the "command Reindex already exists" crash.
+CONFLICTING_EXTENSIONS=(
   lexical-lsp.lexical
+  JakeBecker.elixir-ls
+  jakebecker.elixir-ls
+  pantajoe.vscode-elixir-credo
+)
+
+EXTENSIONS=(
+  ExpertLSP.expert
   ms-kubernetes-tools.vscode-kubernetes-tools
   ms-azuretools.vscode-containers
   phoenixframework.phoenix
   bradlc.vscode-tailwindcss
+  esbenp.prettier-vscode
   redhat.vscode-yaml
   ms-vscode.makefile-tools
   eamodio.gitlens
@@ -17,43 +32,29 @@ EXTENSIONS=(
   yzhang.markdown-all-in-one
 )
 
-for ext in "${EXTENSIONS[@]}"; do
-  code --install-extension "$ext" || true
-done
-
-if pgrep -x ollama >/dev/null 2>&1 || systemctl is-active --quiet ollama; then
-  code --install-extension saoudrizwan.claude-dev || true
+if ! command -v code >/dev/null 2>&1; then
+  echo "VS Code CLI not found; skipping VS Code configuration."
+  exit 0
 fi
 
-mkdir -p "$HOME/doorapi/.vscode"
+for ext in "${CONFLICTING_EXTENSIONS[@]}"; do
+  code --uninstall-extension "$ext" >/dev/null 2>&1 || true
+done
 
-cat > "$HOME/doorapi/.vscode/settings.json" <<'JSON'
-{
-  "editor.formatOnSave": true,
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
+for ext in "${EXTENSIONS[@]}"; do
+  code --install-extension "$ext" --force || true
+done
 
-  "[elixir]": {
-    "editor.defaultFormatter": "lexical-lsp.lexical"
-  },
-  "[phoenix-heex]": {
-    "editor.defaultFormatter": "lexical-lsp.lexical"
-  },
+mkdir -p "$GLOBAL_SETTINGS_DIR" "$HOME/doorapi/.vscode"
 
-  "files.associations": {
-    "*.heex": "phoenix-heex",
-    "*.leex": "phoenix-heex",
-    "*.sface": "phoenix-heex"
-  },
+# Preserve the previous global settings before installing the managed baseline.
+if [[ -f "$GLOBAL_SETTINGS_FILE" ]]; then
+  cp -f "$GLOBAL_SETTINGS_FILE" "$GLOBAL_SETTINGS_FILE.doorstation-backup"
+fi
+cp -f "$ROOT_DIR/vscode/settings.json" "$GLOBAL_SETTINGS_FILE"
+cp -f "$ROOT_DIR/vscode/settings.json" "$HOME/doorapi/.vscode/settings.json"
+cp -f "$ROOT_DIR/vscode/extensions.json" "$HOME/doorapi/.vscode/extensions.json"
 
-  "emmet.includeLanguages": {
-    "phoenix-heex": "html",
-    "elixir": "html"
-  },
-
-  "tailwindCSS.includeLanguages": {
-    "phoenix-heex": "html",
-    "elixir": "html"
-  }
-}
-JSON
+echo "VS Code configured for Expert LSP."
+echo "Global settings: $GLOBAL_SETTINGS_FILE"
+echo "Previous settings backup: $GLOBAL_SETTINGS_FILE.doorstation-backup"

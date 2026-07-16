@@ -231,3 +231,18 @@ Walker now:
 - starts only after Elephant responds to `elephant listproviders`;
 - retries automatically after login failures;
 - is checked for both enabled and active state by the final health check.
+
+## VS Code / Elixir language server policy
+
+Doorstation configures VS Code to use **Expert** as the sole Elixir language server.
+During setup it removes Lexical, ElixirLS and the standalone Credo extension to prevent duplicate diagnostics, formatter conflicts and the `command 'Reindex' already exists` crash.
+
+Managed VS Code settings include:
+
+- Expert formatter for Elixir, HEEx and EEx;
+- format on save;
+- `_build`, `deps`, `.git` and `node_modules` watcher exclusions;
+- Todo Tree ripgrep path set to `/usr/bin/rg`;
+- login Bash terminal profile (`/usr/bin/bash -l`).
+
+Existing global settings are backed up to `~/.config/Code/User/settings.json.doorstation-backup` before the managed baseline is installed.
