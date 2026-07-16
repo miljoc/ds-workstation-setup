@@ -6,7 +6,7 @@ sudo dnf install -y curl unzip python3 glib2 gnome-extensions-app
 SHELL_VERSION="$(gnome-shell --version 2>/dev/null | grep -oE '[0-9]+' | head -1 || true)"
 SHELL_VERSION="${SHELL_VERSION:-49}"
 EXT_ROOT="$HOME/.local/share/gnome-shell/extensions"
-STATE_DIR="$HOME/.local/state/doorsecure-workstation"
+STATE_DIR="$HOME/.local/state/doorstation"
 STATE_FILE="$STATE_DIR/installed-gnome-extensions.txt"
 mkdir -p "$EXT_ROOT" "$STATE_DIR"
 touch "$STATE_FILE"

@@ -90,7 +90,7 @@ echo
 echo "GNOME extension activation:"
 gsettings get org.gnome.shell disable-user-extensions 2>/dev/null | sed 's/^/  disable-user-extensions: /' || true
 gsettings get org.gnome.shell enabled-extensions 2>/dev/null | sed 's/^/  enabled-extensions: /' || true
-STATE_FILE="$HOME/.local/state/doorsecure-workstation/installed-gnome-extensions.txt"
+STATE_FILE="$HOME/.local/state/doorstation/installed-gnome-extensions.txt"
 if [[ -f "$STATE_FILE" ]]; then
   while read -r uuid; do
     [[ -n "$uuid" ]] || continue
@@ -104,7 +104,7 @@ fi
 
 echo
 echo "== Bundled and custom GNOME extensions =="
-BUNDLED_STATE="$HOME/.local/state/doorsecure-workstation/bundled-gnome-extensions.txt"
+BUNDLED_STATE="$HOME/.local/state/doorstation/bundled-gnome-extensions.txt"
 if [[ -s "$BUNDLED_STATE" ]]; then
   while IFS= read -r uuid; do
     [[ -n "$uuid" ]] || continue

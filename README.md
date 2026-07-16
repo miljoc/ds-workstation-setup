@@ -1,12 +1,42 @@
-# DS Dev Machien
+# DOORSTATION 3.2
 
-Bootstrap for a Rocky Linux DoorAPI development workstation.
+██████╗  ██████╗  ██████╗ ██████╗ ███████╗████████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+██║  ██║██║   ██║██║   ██║██████╔╝███████╗   ██║   ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██║  ██║██║   ██║██║   ██║██╔══██╗╚════██║   ██║   ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+██████╔╝╚██████╔╝╚██████╔╝██║  ██║███████║   ██║   ██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+
+A managed Rocky Linux 10 developer workstation toolkit with an interactive installer, updates, health checks, GNOME extensions, media tools, Walker/Elephant and optional ROCm.
 
 ## Install
 
 ```bash
 ./install.sh
 ```
+
+## Single-command installation
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/miljoc/ds-workstation-setup/main/bootstrap/install | bash
+```
+
+The bootstrap clones or updates the repository in `~/.local/share/doorstation/source` and launches the interactive installer. Override the Git source with `DOORSTATION_REPO_URL`, `DOORSTATION_BRANCH`, or `DOORSTATION_HOME`.
+
+The global management command is installed as `/usr/local/bin/doorstation`:
+
+```bash
+doorstation status
+doorstation doctor
+doorstation update
+doorstation backup
+doorstation rollback
+doorstation extensions
+doorstation logs
+doorstation version
+```
+
+`duplo.sh` was removed in 3.2. The small `bootstrap/install` file is its maintainable replacement.
 
 ## Export current GNOME setup into this wizard
 
@@ -138,7 +168,7 @@ The setup installs one consolidated Nautilus extension for image/video conversio
 ## Premium setup wizard
 
 `install.sh` now opens a Whiptail checklist, logs the full installation to
-`~/workstation-setup.log`, keeps the terminal open after success or failure, and
+`~/doorstation-setup.log`, keeps the terminal open after success or failure, and
 shows the exact failed module when something goes wrong.
 
 Additional GNOME extensions installed from extensions.gnome.org:
@@ -150,17 +180,17 @@ Additional GNOME extensions installed from extensions.gnome.org:
 - ClipQR (6697)
 - ROCm GPU Monitor (9496, only when ROCm is selected)
 
-## Workstation management CLI
+## Doorstation management CLI
 
-The installer now creates a backup before changing GNOME and installs `~/.local/bin/workstation`.
+The installer now creates a backup before changing GNOME and installs ``/usr/local/bin/doorstation``.
 
 ```bash
-workstation status
-workstation doctor
-workstation extensions
-workstation backup
-workstation rollback
-workstation update
+doorstation status
+doorstation doctor
+doorstation extensions
+doorstation backup
+doorstation rollback
+doorstation update
 ```
 
 GNOME extensions are handled in three groups:

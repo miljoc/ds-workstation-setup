@@ -7,7 +7,7 @@ EXT_DST="$HOME/.local/share/gnome-shell/extensions"
 DCONF_DIR="$ROOT_DIR/gnome/dconf"
 
 mkdir -p "$EXT_DST"
-BUNDLED_STATE="$HOME/.local/state/doorsecure-workstation/bundled-gnome-extensions.txt"
+BUNDLED_STATE="$HOME/.local/state/doorstation/bundled-gnome-extensions.txt"
 mkdir -p "$(dirname "$BUNDLED_STATE")"
 : > "$BUNDLED_STATE"
 
@@ -100,7 +100,7 @@ fi
 
 # Re-enable extensions downloaded by scripts/89-gnome-extensions.sh. The
 # bundled extension restore above must never erase or disable these.
-STATE_FILE="$HOME/.local/state/doorsecure-workstation/installed-gnome-extensions.txt"
+STATE_FILE="$HOME/.local/state/doorstation/installed-gnome-extensions.txt"
 if [ -f "$STATE_FILE" ]; then
   while read -r ext; do
     [ -z "$ext" ] && continue

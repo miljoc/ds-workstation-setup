@@ -1,24 +1,33 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-STATE_ROOT="$HOME/.local/share/doorsecure-workstation"
+STATE_ROOT="$HOME/.local/share/doorstation"
 BACKUP_ROOT="$STATE_ROOT/backups"
 EXT_DIR="$HOME/.local/share/gnome-shell/extensions"
-MANAGED_FILE="$HOME/.local/state/doorsecure-workstation/installed-gnome-extensions.txt"
+MANAGED_FILE="$HOME/.local/state/doorstation/installed-gnome-extensions.txt"
 SOURCE_PATH="$(cat "$STATE_ROOT/source-path" 2>/dev/null || true)"
+VERSION="$(cat "$STATE_ROOT/version" 2>/dev/null || echo 3.2.0)"
 
 usage() {
   cat <<'USAGE'
-Usage: workstation <command>
+ ____   ___   ___  ____  ____ _____  _  _____ ___ ___  _   _
+|  _ \ / _ \ / _ \|  _ \ / ___|_   _|/ \|_   _|_ _/ _ \| \ | |
+| | | | | | | | | | |_) |\___ \ | | / _ \ | |  | | | | | | |  \| |
+| |_| | |_| | |_| |  _ <  ___) || |/ ___ \| |  | | |_| | |\  |
+|____/ \___/ \___/|_| \_\|____/ |_/_/   \_\_| |___\___/|_| \_|
+
+Usage: doorstation <command>
 
 Commands:
-  doctor              Run workstation health checks
+  doctor              Run Doorstation health checks
   status              Show version, source and extension status
   backup              Create a GNOME/user configuration backup
   rollback [backup]   Restore a backup (default: latest)
   update              Pull the Git checkout when possible, then rerun installer
   extensions          Show managed and user/custom extensions
-  uninstall-managed   Remove only workstation-managed downloaded extensions
+  version             Show Doorstation version
+  logs                Show the latest setup log
+  uninstall-managed   Remove only Doorstation-managed downloaded extensions
 USAGE
 }
 
@@ -81,7 +90,8 @@ extensions() {
 }
 
 status() {
-  echo "Workstation version: $(cat "$STATE_ROOT/version" 2>/dev/null || echo unknown)"
+  echo "DOORSTATION $VERSION"
+  echo "Doorstation version: $(cat "$STATE_ROOT/version" 2>/dev/null || echo unknown)"
   echo "Source: ${SOURCE_PATH:-unknown}"
   echo "Latest backup: $(cat "$STATE_ROOT/latest-backup" 2>/dev/null || echo none)"
   echo "User extensions disabled: $(gsettings get org.gnome.shell disable-user-extensions 2>/dev/null || echo unknown)"
@@ -121,6 +131,8 @@ case "${1:-}" in
   rollback) rollback "${2:-}" ;;
   update) update ;;
   extensions) extensions ;;
+  version) echo "$VERSION" ;;
+  logs) less +G "${DOORSTATION_LOG_FILE:-$HOME/doorstation-setup.log}" ;;
   uninstall-managed) uninstall_managed ;;
   -h|--help|help|"") usage ;;
   *) echo "Onbekend commando: $1" >&2; usage; exit 2 ;;

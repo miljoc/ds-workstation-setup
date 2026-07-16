@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+REPO_URL="${DOORSTATION_REPO_URL:-https://github.com/miljoc/ds-workstation-setup.git}"
+BRANCH="${DOORSTATION_BRANCH:-main}"
+TARGET_DIR="${DOORSTATION_HOME:-$HOME/.local/share/doorstation/source}"
+echo "Installing DOORSTATION 3.2..."
+command -v git >/dev/null 2>&1 || sudo dnf install -y git
+mkdir -p "$(dirname "$TARGET_DIR")"
+if [[ -d "$TARGET_DIR/.git" ]]; then
+  git -C "$TARGET_DIR" fetch --prune origin
+  git -C "$TARGET_DIR" checkout "$BRANCH"
+  git -C "$TARGET_DIR" pull --ff-only origin "$BRANCH"
+else
+  rm -rf "$TARGET_DIR"
+  git clone --branch "$BRANCH" --single-branch "$REPO_URL" "$TARGET_DIR"
+fi
+chmod +x "$TARGET_DIR/install.sh" "$TARGET_DIR/scripts/"*.sh "$TARGET_DIR/doorstation"
+exec "$TARGET_DIR/install.sh" "$@"

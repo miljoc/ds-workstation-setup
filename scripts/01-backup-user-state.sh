@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STATE_ROOT="$HOME/.local/share/doorsecure-workstation"
+STATE_ROOT="$HOME/.local/share/doorstation"
 BACKUP_ROOT="$STATE_ROOT/backups"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 DEST="$BACKUP_ROOT/$STAMP"

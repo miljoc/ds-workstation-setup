@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-WIZARD_BUILD="v3.1-walker-elephant-bootfix-2026-07-16"
+WIZARD_BUILD="v3.2.0-2026-07-16"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="${WORKSTATION_LOG_FILE:-$HOME/workstation-setup.log}"
+LOG_FILE="${DOORSTATION_LOG_FILE:-${WORKSTATION_LOG_FILE:-$HOME/doorstation-setup.log}}"
 CURRENT_STEP="Initialisatie"
 INSTALL_FINISHED=0
 
@@ -85,6 +85,19 @@ selected() {
   [[ " $SELECTIONS " == *" $needle "* ]]
 }
 
+show_ascii() {
+  cat > /dev/tty <<'ASCII'
+ ____   ___   ___  ____  ____ _____  _  _____ ___ ___  _   _
+|  _ \ / _ \ / _ \|  _ \ / ___|_   _|/ \|_   _|_ _/ _ \| \ | |
+| | | | | | | | | | |_) |\___ \ | | / _ \ | |  | | | | | | |  \| |
+| |_| | |_| | |_| |  _ <  ___) || |/ ___ \| |  | | |_| | |\  |
+|____/ \___/ \___/|_| \_\|____/ |_/_/   \_\_| |___\___/|_| \_|
+
+                    DOORSTATION 3.2
+          Developer workstation toolkit for Rocky Linux 10
+ASCII
+}
+
 ensure_tui() {
   if ! command -v whiptail >/dev/null 2>&1; then
     echo "Whiptail wordt geinstalleerd voor de setupwizard..."
@@ -108,7 +121,7 @@ show_tui() {
   {
     clear
     echo "============================================================"
-    echo " Doorsecure Workstation Setup Wizard ($WIZARD_BUILD)"
+    echo " DOORSTATION Setup Wizard ($WIZARD_BUILD)"
     echo "============================================================"
     echo "De checklist wordt nu geopend..."
     sleep 1
@@ -116,7 +129,7 @@ show_tui() {
 
   set +e
   whiptail \
-    --title "Doorsecure Developer Workstation" \
+    --title "DOORSTATION 3.2" \
     --backtitle "Rocky Linux 10 single-command setup - $WIZARD_BUILD" \
     --separate-output \
     --checklist "Selecteer onderdelen. Spatie = aan/uit, Enter = installeren." \
@@ -156,6 +169,8 @@ show_tui() {
     echo
   } > /dev/tty
 }
+
+show_ascii
 
 # The wizard is intentionally displayed BEFORE stdout/stderr are redirected to
 # tee. This is the reliable, standard whiptail pattern and prevents wrappers or
@@ -236,7 +251,7 @@ if selected repos; then
   run "VS Code workspace" "96-vscode-workspace.sh"
 fi
 
-run "Install workstation CLI" "97-install-workstation-cli.sh"
+run "Install Doorstation CLI" "97-install-workstation-cli.sh"
 run "Final checks" "99-check.sh"
 
 INSTALL_FINISHED=1
