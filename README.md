@@ -78,3 +78,126 @@ Override the pinned source tag during installation with, for example:
 ```bash
 UXPLAY_TAG=v1.73 ./install.sh
 ```
+
+## Screenshot OCR and QR scanning
+
+The setup installs [Shotzy](https://extensions.gnome.org/extension/9707/shotzy/) for GNOME Shell 49/50. It adds OCR, QR scanning, and Google Lens actions to GNOME's built-in screenshot interface.
+
+Installed dependencies include:
+
+- Tesseract OCR with English and Dutch language packs;
+- ZBar (`zbarimg`) for QR and barcode recognition;
+- Poppler utilities for PDF-related image workflows.
+
+Shotzy is installed as:
+
+```text
+~/.local/share/gnome-shell/extensions/shotzy@SamkitJain660.github.io
+```
+
+Override its source branch during setup with:
+
+```bash
+SHOTZY_REF=main ./install.sh
+```
+
+## Nautilus media tools
+
+The setup installs both native Nautilus context-menu extensions:
+
+- `image_converter.py`: JPG, PNG, WebP, resizing, rotation, and Rocky Linux HEIC fallback through `heif-convert`;
+- `video_converter.py`: MP4/WebM conversion and audio extraction through FFmpeg, including automatic padding for odd video dimensions.
+
+They are installed under:
+
+```text
+~/.local/share/nautilus-python/extensions/
+```
+
+## Nautilus new-document templates
+
+The setup installs a structured **New Document** menu for Nautilus. Right-click inside a folder and choose:
+
+```text
+New Document
+├── General
+├── Development
+├── DoorAPI
+└── Kubernetes
+```
+
+Included templates cover empty/text/Markdown files, shell and Python scripts, Elixir/Phoenix files, Docker and Compose files, systemd services, DoorAPI integration and device modules, Ecto schemas/migrations, tests, and common Kubernetes resources.
+
+Templates are installed in the user's XDG Templates directory (normally `~/Templates`). Existing personal templates outside the managed `General`, `Development`, `DoorAPI`, and `Kubernetes` folders are preserved.
+
+
+## Workstation Tools
+
+The setup installs one consolidated Nautilus extension for image/video conversion, OCR, QR scanning, metadata, SHA-256 and path copying. Developer templates are generated directly by the installer, so no external template directory is required.
+
+## Premium setup wizard
+
+`install.sh` now opens a Whiptail checklist, logs the full installation to
+`~/workstation-setup.log`, keeps the terminal open after success or failure, and
+shows the exact failed module when something goes wrong.
+
+Additional GNOME extensions installed from extensions.gnome.org:
+
+- UXPlay Control (8243)
+- Medialine (10076)
+- GSConnect (1319)
+- Custom Command Menu (7024)
+- ClipQR (6697)
+- ROCm GPU Monitor (9496, only when ROCm is selected)
+
+## Workstation management CLI
+
+The installer now creates a backup before changing GNOME and installs `~/.local/bin/workstation`.
+
+```bash
+workstation status
+workstation doctor
+workstation extensions
+workstation backup
+workstation rollback
+workstation update
+```
+
+GNOME extensions are handled in three groups:
+
+1. **Bundled extensions** from `gnome/extensions/` are copied one UUID at a time and enabled.
+2. **Managed EGO extensions** are downloaded by the setup and tracked separately.
+3. **Existing user/custom extensions** are never deleted or overwritten by a global sync and are backed up before setup.
+
+A full rollback intentionally restores the exact extension snapshot taken before installation.
+
+## Setupwizard
+
+Interactieve installatie (standaard):
+
+```bash
+./install.sh
+```
+
+De Whiptail-checklist verschijnt voordat logging wordt gestart. Niet-interactief kan alleen expliciet:
+
+```bash
+./install.sh --all
+./install.sh --components "core media uxplay gnomeext"
+```
+
+Wanneer de omgevingsvariabele `WORKSTATION_COMPONENTS` is gezet, wordt de wizard bewust overgeslagen en toont de installer daarvoor een waarschuwing. Controleer dit met `env | grep WORKSTATION_COMPONENTS` en verwijder hem eventueel met `unset WORKSTATION_COMPONENTS`.
+
+## Walker / Elephant boot reliability fix
+
+This build removes the fragile `ConditionEnvironment=WAYLAND_DISPLAY` check from
+Elephant. The Elephant backend does not require a Wayland display and could be
+skipped by the systemd user manager before the GNOME session environment was
+imported.
+
+Walker now:
+
+- requires `elephant.service`;
+- starts only after Elephant responds to `elephant listproviders`;
+- retries automatically after login failures;
+- is checked for both enabled and active state by the final health check.

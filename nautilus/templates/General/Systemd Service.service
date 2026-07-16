@@ -1,0 +1,13 @@
+[Unit]
+Description=Example user service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/example
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

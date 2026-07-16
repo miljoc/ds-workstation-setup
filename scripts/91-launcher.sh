@@ -13,7 +13,21 @@ ELEPHANT_DIR="$BUILD_DIR/elephant"
 LOCAL_BIN="$HOME/.local/bin"
 PROVIDER_DIR="$HOME/.config/elephant/providers"
 
-mkdir -p "$BUILD_DIR" "$LOCAL_BIN" "$PROVIDER_DIR" "$HOME/.config/walker" "$HOME/.config/systemd/user"
+mkdir -p "$BUILD_DIR" "$LOCAL_BIN" "$PROVIDER_DIR" "$HOME/.config/walker"
+
+SYSTEMD_USER_DIR="$HOME/.config/systemd/user"
+if [[ -e "$SYSTEMD_USER_DIR" && ! -O "$SYSTEMD_USER_DIR" ]]; then
+  echo "→ Herstellen van eigendom voor $SYSTEMD_USER_DIR"
+  sudo chown -R "$USER:$(id -gn)" "$SYSTEMD_USER_DIR"
+fi
+mkdir -p "$SYSTEMD_USER_DIR"
+
+for service_file in "$SYSTEMD_USER_DIR/elephant.service" "$SYSTEMD_USER_DIR/walker.service"; do
+  if [[ -e "$service_file" && ! -O "$service_file" ]]; then
+    echo "→ Herstellen van eigendom voor $(basename "$service_file")"
+    sudo chown "$USER:$(id -gn)" "$service_file"
+  fi
+done
 
 echo "=== Walker + Elephant installatie (Rocky Linux 10) ==="
 
@@ -137,13 +151,12 @@ cat > "$HOME/.config/systemd/user/elephant.service" <<'EOF_SERVICE'
 Description=Elephant Backend for Walker
 PartOf=graphical-session.target
 After=graphical-session.target
-ConditionEnvironment=WAYLAND_DISPLAY
 
 [Service]
 Type=simple
 ExecStart=%h/.local/bin/elephant
-Restart=on-failure
-RestartSec=3
+Restart=always
+RestartSec=2
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
 
 [Install]
@@ -154,21 +167,43 @@ cat > "$HOME/.config/systemd/user/walker.service" <<'EOF_SERVICE'
 [Unit]
 Description=Walker Launcher Service
 PartOf=graphical-session.target
+Requires=elephant.service
 After=elephant.service
 
 [Service]
 Type=simple
+ExecStartPre=/usr/bin/bash -lc 'for i in $(seq 1 30); do %h/.local/bin/elephant listproviders >/dev/null 2>&1 && exit 0; sleep 1; done; echo "Elephant did not become ready within 30 seconds" >&2; exit 1'
 ExecStart=%h/.local/bin/walker --gapplication-service
-Restart=on-failure
-RestartSec=3
+Restart=always
+RestartSec=2
 
 [Install]
 WantedBy=default.target
 EOF_SERVICE
 
 systemctl --user daemon-reload
-systemctl --user enable --now elephant.service walker.service
-systemctl --user restart elephant.service walker.service
+systemctl --user enable elephant.service walker.service
+systemctl --user reset-failed elephant.service walker.service || true
+systemctl --user restart elephant.service
+
+# Wait until Elephant is responsive before Walker starts. This avoids Walker
+# remaining at "Waiting for Elephant" after a fresh graphical login.
+elephant_ready=false
+for _ in $(seq 1 30); do
+  if "$LOCAL_BIN/elephant" listproviders >/dev/null 2>&1; then
+    elephant_ready=true
+    break
+  fi
+  sleep 1
+done
+
+if [[ "$elephant_ready" != true ]]; then
+  echo "ERROR: Elephant did not become ready within 30 seconds."
+  systemctl --user status elephant.service --no-pager || true
+  exit 1
+fi
+
+systemctl --user restart walker.service
 sleep 2
 
 echo "→ Installed providers:"

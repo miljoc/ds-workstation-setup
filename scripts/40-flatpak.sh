@@ -12,4 +12,5 @@ flatpak install -y flathub \
   com.tencent.WeChat \
   org.wireshark.Wireshark \
   io.github.db_mobile.resonance \
+  me.iepure.devtoolbox \
   im.riot.Riot || true

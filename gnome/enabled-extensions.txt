@@ -6,3 +6,4 @@ live-lockscreen@nick-redwill
 jef.carlier@doorsecure.nl
 tophat@fflewddur.github.io
 background-logo@fedorahosted.org
+shotzy@SamkitJain660.github.io

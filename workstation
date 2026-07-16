@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+STATE_ROOT="$HOME/.local/share/doorsecure-workstation"
+BACKUP_ROOT="$STATE_ROOT/backups"
+EXT_DIR="$HOME/.local/share/gnome-shell/extensions"
+MANAGED_FILE="$HOME/.local/state/doorsecure-workstation/installed-gnome-extensions.txt"
+SOURCE_PATH="$(cat "$STATE_ROOT/source-path" 2>/dev/null || true)"
+
+usage() {
+  cat <<'USAGE'
+Usage: workstation <command>
+
+Commands:
+  doctor              Run workstation health checks
+  status              Show version, source and extension status
+  backup              Create a GNOME/user configuration backup
+  rollback [backup]   Restore a backup (default: latest)
+  update              Pull the Git checkout when possible, then rerun installer
+  extensions          Show managed and user/custom extensions
+  uninstall-managed   Remove only workstation-managed downloaded extensions
+USAGE
+}
+
+backup() {
+  if [[ -n "$SOURCE_PATH" && -x "$SOURCE_PATH/scripts/01-backup-user-state.sh" ]]; then
+    bash "$SOURCE_PATH/scripts/01-backup-user-state.sh"
+    return
+  fi
+  stamp="$(date +%Y%m%d-%H%M%S)"
+  dest="$BACKUP_ROOT/$stamp"
+  mkdir -p "$dest/gnome-extensions"
+  [[ -d "$EXT_DIR" ]] && cp -a "$EXT_DIR/." "$dest/gnome-extensions/"
+  gsettings get org.gnome.shell enabled-extensions > "$dest/enabled-extensions.gvariant" 2>/dev/null || true
+  dconf dump /org/gnome/ > "$dest/gnome.dconf" 2>/dev/null || true
+  printf '%s\n' "$dest" > "$STATE_ROOT/latest-backup"
+  echo "$dest"
+}
+
+rollback() {
+  local src="${1:-}"
+  [[ -n "$src" ]] || src="$(cat "$STATE_ROOT/latest-backup" 2>/dev/null || true)"
+  if [[ -z "$src" || ! -d "$src" ]]; then
+    echo "Geen geldige backup gevonden." >&2
+    exit 1
+  fi
+
+  mkdir -p "$EXT_DIR"
+  if [[ -d "$src/gnome-extensions" ]]; then
+    # Rollback is intentionally exact: replace extension files with the snapshot.
+    find "$EXT_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+    cp -a "$src/gnome-extensions/." "$EXT_DIR/"
+  fi
+  [[ -s "$src/gnome.dconf" ]] && dconf load /org/gnome/ < "$src/gnome.dconf" || true
+  if [[ -s "$src/enabled-extensions.gvariant" ]]; then
+    gsettings set org.gnome.shell enabled-extensions "$(cat "$src/enabled-extensions.gvariant")" || true
+  fi
+  gsettings set org.gnome.shell disable-user-extensions false || true
+  echo "✓ Hersteld: $src"
+  echo "Meld af en opnieuw aan om GNOME Shell volledig te herladen."
+}
+
+extensions() {
+  echo "Managed extensions:"
+  if [[ -s "$MANAGED_FILE" ]]; then
+    sed 's/^/  /' "$MANAGED_FILE"
+  else
+    echo "  (geen geregistreerd)"
+  fi
+  echo
+  echo "Bundled/custom extensions installed locally:"
+  if [[ -d "$EXT_DIR" ]]; then
+    while IFS= read -r path; do
+      uuid="$(basename "$path")"
+      if [[ -s "$MANAGED_FILE" ]] && grep -Fxq "$uuid" "$MANAGED_FILE"; then
+        continue
+      fi
+      echo "  $uuid"
+    done < <(find "$EXT_DIR" -mindepth 1 -maxdepth 1 -type d | sort)
+  fi
+}
+
+status() {
+  echo "Workstation version: $(cat "$STATE_ROOT/version" 2>/dev/null || echo unknown)"
+  echo "Source: ${SOURCE_PATH:-unknown}"
+  echo "Latest backup: $(cat "$STATE_ROOT/latest-backup" 2>/dev/null || echo none)"
+  echo "User extensions disabled: $(gsettings get org.gnome.shell disable-user-extensions 2>/dev/null || echo unknown)"
+  echo "Enabled extensions: $(gsettings get org.gnome.shell enabled-extensions 2>/dev/null || echo unknown)"
+}
+
+update() {
+  if [[ -z "$SOURCE_PATH" || ! -x "$SOURCE_PATH/install.sh" ]]; then
+    echo "Geen geldige source checkout gevonden." >&2
+    exit 1
+  fi
+  backup
+  if [[ -d "$SOURCE_PATH/.git" ]]; then
+    git -C "$SOURCE_PATH" pull --ff-only
+  fi
+  exec "$SOURCE_PATH/install.sh"
+}
+
+uninstall_managed() {
+  [[ -s "$MANAGED_FILE" ]] || { echo "Geen managed extensions geregistreerd."; return; }
+  while IFS= read -r uuid; do
+    [[ -n "$uuid" ]] || continue
+    gnome-extensions disable "$uuid" >/dev/null 2>&1 || true
+    rm -rf "$EXT_DIR/$uuid"
+    echo "✓ Removed managed extension: $uuid"
+  done < "$MANAGED_FILE"
+  : > "$MANAGED_FILE"
+}
+
+case "${1:-}" in
+  doctor)
+    [[ -n "$SOURCE_PATH" && -x "$SOURCE_PATH/scripts/99-check.sh" ]] || { echo "Doctor script ontbreekt." >&2; exit 1; }
+    bash "$SOURCE_PATH/scripts/99-check.sh"
+    ;;
+  status) status ;;
+  backup) backup ;;
+  rollback) rollback "${2:-}" ;;
+  update) update ;;
+  extensions) extensions ;;
+  uninstall-managed) uninstall_managed ;;
+  -h|--help|help|"") usage ;;
+  *) echo "Onbekend commando: $1" >&2; usage; exit 2 ;;
+esac
