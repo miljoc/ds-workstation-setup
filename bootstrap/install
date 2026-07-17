@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
-REPO_URL="${DOORSTATION_REPO_URL:-https://github.com/miljoc/ds-workstation-setup.git}"
+REPO_URL="${DOORSTATION_REPO_URL:-https://github.com/miljoc/doorstation.git}"
 BRANCH="${DOORSTATION_BRANCH:-main}"
 TARGET_DIR="${DOORSTATION_HOME:-$HOME/.local/share/doorstation/source}"
 echo "Installing DOORSTATION 3.2..."

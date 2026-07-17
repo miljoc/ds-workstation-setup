@@ -1,12 +1,13 @@
 # DOORSTATION 3.2
 
-██████╗  ██████╗  ██████╗ ██████╗ ███████╗████████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
-██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
-██║  ██║██║   ██║██║   ██║██████╔╝███████╗   ██║   ███████║   ██║   ██║██║   ██║██╔██╗ ██║
-██║  ██║██║   ██║██║   ██║██╔══██╗╚════██║   ██║   ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
-██████╔╝╚██████╔╝╚██████╔╝██║  ██║███████║   ██║   ██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
-╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-
+```
+  ██████╗  ██████╗  ██████╗ ██████╗ ███████╗████████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+  ██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+  ██║  ██║██║   ██║██║   ██║██████╔╝███████╗   ██║   ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+  ██║  ██║██║   ██║██║   ██║██╔══██╗╚════██║   ██║   ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+  ██████╔╝╚██████╔╝╚██████╔╝██║  ██║███████║   ██║   ██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+  ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+```
 A managed Rocky Linux 10 developer workstation toolkit with an interactive installer, updates, health checks, GNOME extensions, media tools, Walker/Elephant and optional ROCm.
 
 ## Install
@@ -18,7 +19,7 @@ A managed Rocky Linux 10 developer workstation toolkit with an interactive insta
 ## Single-command installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/miljoc/ds-workstation-setup/main/bootstrap/install | bash
+curl -fsSL https://raw.githubusercontent.com/miljoc/doorstation/main/bootstrap/install | bash
 ```
 
 The bootstrap clones or updates the repository in `~/.local/share/doorstation/source` and launches the interactive installer. Override the Git source with `DOORSTATION_REPO_URL`, `DOORSTATION_BRANCH`, or `DOORSTATION_HOME`.
